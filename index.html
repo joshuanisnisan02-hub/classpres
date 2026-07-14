@@ -3,197 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A central portal for accessing class presentations, lessons, and learning materials.">
-  <meta name="theme-color" content="#071a3d">
-  <title>Class Presentation Hub</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <meta name="description" content="PROF 3 Managing Information and Technology course lesson portal for BSAIS students.">
+  <meta name="theme-color" content="#0b1736">
+  <title>PROF 3 | Managing Information and Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0a1533;--panel:#11234c;--panel-hover:#162c5d;--line:#24406f;--blue:#4f8cff;--violet:#9b7cff;--text:#f5f7ff;--muted:#a9b8d5;--soft:#7385a8}
+    html{scroll-behavior:smooth}
+    body{min-height:100vh;background:var(--bg);color:var(--text);font-family:"Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    .hero{background:linear-gradient(145deg,#101d44 0%,#0a1533 58%,#17153c 100%);border-bottom:1px solid var(--line);padding:clamp(3rem,8vw,6rem) 1.25rem}
+    .hero-inner,.section,.footer-inner{width:min(1060px,100%);margin:auto}
+    .badge{display:inline-block;margin-bottom:1.5rem;padding:.45rem .9rem;border:1px solid #45659d;border-radius:999px;background:#1b3262;color:#c4d5ff;font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    h1{font-family:"Archivo Black",sans-serif;font-size:clamp(2.35rem,6.5vw,4.6rem);line-height:1.02;letter-spacing:-.025em;max-width:900px}
+    h1 span{display:block;background:linear-gradient(100deg,#75a7ff,#b89dff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .subtitle{max-width:680px;margin-top:1.25rem;color:var(--muted);font-size:clamp(1rem,2vw,1.18rem);line-height:1.7}
+    .meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem;margin-top:2.25rem;padding-top:1.5rem;border-top:1px solid var(--line)}
+    .meta dt{margin-bottom:.28rem;color:var(--soft);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.meta dd{color:#dce6ff;font-size:.92rem}
+    main{padding:1rem 0 4rem}
+    .section{padding:2.6rem 1.25rem 0}
+    .section-title{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;font-family:"Archivo Black",sans-serif;font-size:1.2rem;color:#dbe5ff}
+    .section-title::before{content:"";width:4px;height:1.35em;border-radius:4px;background:linear-gradient(var(--blue),var(--violet))}
+    .section-title small{font-family:"Space Grotesk",sans-serif;color:var(--soft);font-size:.75rem;font-weight:600}
+    .lessons{display:grid;gap:.75rem}
+    .lesson{display:grid;grid-template-columns:3.4rem 1fr auto;align-items:center;gap:1.2rem;min-height:104px;padding:1.15rem 1.25rem;background:var(--panel);border:1px solid var(--line);border-radius:14px;color:inherit;text-decoration:none;transition:.22s ease}
+    .lesson:hover{transform:translateY(-2px);background:var(--panel-hover);border-color:#4a69a1;box-shadow:0 14px 32px rgba(0,0,0,.2)}
+    .number{display:grid;place-items:center;width:3.4rem;height:3.4rem;border:1px solid #365486;border-radius:10px;background:#0c1b3d;font-family:"Archivo Black",sans-serif;color:#dce8ff}
+    .eyebrow{margin-bottom:.3rem;color:#8094ba;font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+    .lesson h3{font-family:"Archivo Black",sans-serif;font-size:clamp(.94rem,1.8vw,1.08rem);line-height:1.3}
+    .lesson p{margin-top:.35rem;color:var(--muted);font-size:.82rem;line-height:1.45}
+    .arrow{color:#9bbaff;font-size:1.35rem;transition:.2s ease}.lesson:hover .arrow{transform:translateX(3px)}
+    footer{border-top:1px solid var(--line);padding:2.2rem 1.25rem;text-align:center}.footer-inner p{color:var(--muted);font-size:.82rem;line-height:1.65}.footer-inner strong{color:#e8eeff}
+    @media(max-width:760px){.meta{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson{grid-template-columns:3rem 1fr;gap:1rem}.number{width:3rem;height:3rem}.arrow{display:none}}
+    @media(max-width:460px){.meta{grid-template-columns:1fr}.hero{padding-top:2.6rem}.lesson{align-items:start;padding:1rem}.lesson p{font-size:.78rem}}
+  </style>
 </head>
 <body>
-  <div class="background-effects" aria-hidden="true">
-    <span class="orb orb-one"></span>
-    <span class="orb orb-two"></span>
-    <span class="grid-overlay"></span>
-  </div>
-
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="Class Presentation Hub home">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" role="img">
-          <path d="M8 10.5A4.5 4.5 0 0 1 12.5 6h23A4.5 4.5 0 0 1 40 10.5v21a4.5 4.5 0 0 1-4.5 4.5H27l-8 7v-7h-6.5A4.5 4.5 0 0 1 8 31.5v-21Z" fill="currentColor" opacity=".22"/>
-          <path d="M14 15h20M14 22h15M14 29h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </span>
-      <span>
-        <strong>ClassPres</strong>
-        <small>Presentation Hub</small>
-      </span>
-    </a>
-
-    <nav class="desktop-nav" aria-label="Primary navigation">
-      <a href="#lessons">Lessons</a>
-      <a href="#guide">Student Guide</a>
-      <a href="#about">About</a>
-    </nav>
-
-    <a class="header-button" href="#lessons">Browse lessons</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="badge">PROF 3 · BSAIS</div>
+      <h1>Managing Information<span>and Technology</span></h1>
+      <p class="subtitle">A simple course portal for accessing presentation-based lessons on information quality, business processes, IT governance, cybersecurity, risk, controls, and enterprise systems.</p>
+      <dl class="meta">
+        <div><dt>Instructor</dt><dd>Joshua E. Nisnisan</dd></div>
+        <div><dt>Institution</dt><dd>Cronasia Foundation College</dd></div>
+        <div><dt>Program</dt><dd>Bachelor of Science in Accounting Information Systems</dd></div>
+        <div><dt>Available Lessons</dt><dd>21 HTML presentations</dd></div>
+      </dl>
+    </div>
   </header>
 
-  <main id="top">
-    <section class="hero section-shell">
-      <div class="hero-copy">
-        <div class="eyebrow"><span></span> Your digital classroom</div>
-        <h1>All class presentations, <em>organized in one place.</em></h1>
-        <p>
-          Open your assigned lesson, study each slide carefully, and complete the activities posted by your instructor.
-        </p>
-        <div class="hero-actions">
-          <a class="primary-button" href="#lessons">
-            View presentations
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="secondary-button" href="#guide">How to use this portal</a>
-        </div>
-        <div class="hero-meta" aria-label="Portal features">
-          <span><strong>36</strong> lesson slots</span>
-          <span><strong>18</strong> academic weeks</span>
-          <span><strong>24/7</strong> online access</span>
-        </div>
-      </div>
-
-      <div class="hero-panel" aria-label="Featured lesson preview">
-        <div class="panel-topbar">
-          <span class="window-dots"><i></i><i></i><i></i></span>
-          <span>classpres / lesson-viewer</span>
-          <span class="online-indicator">Online</span>
-        </div>
-        <div class="featured-card">
-          <div class="featured-number">01</div>
-          <span class="featured-label">Featured presentation</span>
-          <h2>Welcome to your learning portal</h2>
-          <p>The first sample presentation is ready. Replace it with your actual Week 1, Session 1 lesson anytime.</p>
-          <a href="presentations/week-01/session-01/">Open sample lesson <span>→</span></a>
-        </div>
-        <div class="mini-cards" aria-hidden="true">
-          <div><span>W01</span><strong>Session 1</strong></div>
-          <div><span>W01</span><strong>Session 2</strong></div>
-          <div><span>W02</span><strong>Session 1</strong></div>
-        </div>
-      </div>
+  <main>
+    <section class="section">
+      <h2 class="section-title">Prelim <small>Weeks 1–3</small></h2>
+      <nav class="lessons" aria-label="Prelim lessons">
+        <a class="lesson" href="lesson.html?file=Week1_Session2_ITStrategy_v2.html" target="_blank"><span class="number">02</span><span><span class="eyebrow">Week 1 · Session 2</span><h3>IT Strategy</h3><p>Align technology decisions, investments, and capabilities with organizational goals.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week2_Session1_InfoQuality_v2.html" target="_blank"><span class="number">03</span><span><span class="eyebrow">Week 2 · Session 1</span><h3>Information Quality</h3><p>Evaluate accuracy, completeness, timeliness, relevance, and reliability of information.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week2_Session2_ISinAccounting_v2.html" target="_blank"><span class="number">04</span><span><span class="eyebrow">Week 2 · Session 2</span><h3>Information Systems in Accounting</h3><p>Explore how accounting information systems capture, process, control, and report transactions.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week3_Session1_BusinessProcesses_v2.html" target="_blank"><span class="number">05</span><span><span class="eyebrow">Week 3 · Session 1</span><h3>Business Processes</h3><p>Understand connected activities, roles, data, controls, and outcomes across an organization.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week3_Session2_ProcessMapping_v2.html" target="_blank"><span class="number">06</span><span><span class="eyebrow">Week 3 · Session 2</span><h3>Process Mapping</h3><p>Visualize workflows, responsibilities, handoffs, decisions, and improvement opportunities.</p></span><span class="arrow">→</span></a>
+      </nav>
     </section>
 
-    <section class="notice-strip" aria-label="Important reminder">
-      <div class="section-shell notice-content">
-        <span class="notice-icon" aria-hidden="true">!</span>
-        <p><strong>Student reminder:</strong> Read each presentation carefully. Follow the instructions and submit required work through your assigned Google Classroom.</p>
-      </div>
+    <section class="section">
+      <h2 class="section-title">Midterm <small>Weeks 4–6</small></h2>
+      <nav class="lessons" aria-label="Midterm lessons">
+        <a class="lesson" href="lesson.html?file=Week4_Session1_DFD_v2.html" target="_blank"><span class="number">07</span><span><span class="eyebrow">Week 4 · Session 1</span><h3>Data Flow Diagrams</h3><p>Model how data moves among processes, external entities, and data stores.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week4_Session2_InfoRequirements_v2.html" target="_blank"><span class="number">08</span><span><span class="eyebrow">Week 4 · Session 2</span><h3>Information Requirements</h3><p>Identify stakeholder needs and translate them into clear, useful system requirements.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week5_Session1_ProcessImprovement_v2.html" target="_blank"><span class="number">09</span><span><span class="eyebrow">Week 5 · Session 1</span><h3>Process Improvement</h3><p>Analyze waste, delays, bottlenecks, controls, and technology-enabled improvements.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week5_Session2_CaseStudyWorkshop_v2.html" target="_blank"><span class="number">10</span><span><span class="eyebrow">Week 5 · Session 2</span><h3>Case Study Workshop</h3><p>Apply process analysis, information quality, and improvement methods to a practical case.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week6_Session1_Module2Integration_v2.html" target="_blank"><span class="number">11</span><span><span class="eyebrow">Week 6 · Session 1</span><h3>Module 2 Integration</h3><p>Connect business processes, diagrams, requirements, and improvement into one analysis.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week6_Session2_ITGovernance_v2.html" target="_blank"><span class="number">12</span><span><span class="eyebrow">Week 6 · Session 2</span><h3>IT Governance</h3><p>Examine direction, accountability, decision rights, COBIT, ITIL, and value delivery.</p></span><span class="arrow">→</span></a>
+      </nav>
     </section>
 
-    <section class="lessons-section section-shell" id="lessons">
-      <div class="section-heading">
-        <div>
-          <div class="eyebrow"><span></span> Course library</div>
-          <h2>Find your presentation</h2>
-          <p>Search by lesson title or filter the cards by week and availability.</p>
-        </div>
-        <div class="lesson-count"><strong id="visibleCount">36</strong><span>lessons shown</span></div>
-      </div>
-
-      <div class="lesson-toolbar">
-        <label class="search-box">
-          <span class="sr-only">Search lessons</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input id="searchInput" type="search" placeholder="Search lesson title, week, or session…" autocomplete="off">
-        </label>
-
-        <div class="filter-group" aria-label="Lesson filters">
-          <select id="weekFilter" aria-label="Filter by week">
-            <option value="all">All weeks</option>
-          </select>
-          <select id="statusFilter" aria-label="Filter by availability">
-            <option value="all">All lessons</option>
-            <option value="available">Available</option>
-            <option value="upcoming">Upcoming</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="lesson-grid" id="lessonGrid" aria-live="polite"></div>
-
-      <div class="empty-state" id="emptyState" hidden>
-        <div aria-hidden="true">⌕</div>
-        <h3>No presentations found</h3>
-        <p>Try a different keyword or remove one of the filters.</p>
-        <button id="resetFilters" type="button">Reset filters</button>
-      </div>
+    <section class="section">
+      <h2 class="section-title">Semifinals <small>Weeks 7–10</small></h2>
+      <nav class="lessons" aria-label="Semifinal lessons">
+        <a class="lesson" href="lesson.html?file=Week7_Session1_InternalControls_v2.html" target="_blank"><span class="number">13</span><span><span class="eyebrow">Week 7 · Session 1</span><h3>Internal Controls &amp; Audit Trails</h3><p>Study preventive, detective, and corrective controls together with reliable evidence.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week7_Session2_CybersecurityAwareness_v2.html" target="_blank"><span class="number">14</span><span><span class="eyebrow">Week 7 · Session 2</span><h3>Cybersecurity Awareness</h3><p>Recognize common threats, human vulnerabilities, secure behavior, and layered protection.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week8_Session1_RiskManagement_v2.html" target="_blank"><span class="number">15</span><span><span class="eyebrow">Week 8 · Session 1</span><h3>Risk Assessment &amp; Management</h3><p>Identify assets, threats, vulnerabilities, likelihood, impact, and treatment options.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week8_Session2_PrivacyComplianceEthics_v2.html" target="_blank"><span class="number">16</span><span><span class="eyebrow">Week 8 · Session 2</span><h3>Privacy, Compliance &amp; Ethics</h3><p>Connect responsible data handling, compliance evidence, professional judgment, and trust.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week9_Session1_AccessControl_v2.html" target="_blank"><span class="number">17</span><span><span class="eyebrow">Week 9 · Session 1</span><h3>Access Control &amp; Identity Management</h3><p>Apply authentication, authorization, RBAC, least privilege, and access lifecycle controls.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week9_Session2_IncidentResponse_v2.html" target="_blank"><span class="number">18</span><span><span class="eyebrow">Week 9 · Session 2</span><h3>Cybersecurity Operations &amp; Incident Response</h3><p>Prepare, detect, contain, eradicate, recover, preserve evidence, and learn from incidents.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week10_Session1_RiskControlMatrix_v2.html" target="_blank"><span class="number">19</span><span><span class="eyebrow">Week 10 · Session 1</span><h3>Risk &amp; Control Matrix Workshop</h3><p>Convert risks into clear control objectives, activities, owners, evidence, and tests.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week10_Session2_Module3Review_v2.html" target="_blank"><span class="number">20</span><span><span class="eyebrow">Week 10 · Session 2</span><h3>Module 3 Integration &amp; Exam Review</h3><p>Integrate governance, risk, controls, cybersecurity, privacy, ethics, and evidence.</p></span><span class="arrow">→</span></a>
+      </nav>
     </section>
 
-    <section class="guide-section" id="guide">
-      <div class="section-shell">
-        <div class="section-heading compact">
-          <div>
-            <div class="eyebrow light"><span></span> Simple instructions</div>
-            <h2>How students use the portal</h2>
-          </div>
-        </div>
-
-        <div class="guide-grid">
-          <article>
-            <span>01</span>
-            <div class="guide-icon" aria-hidden="true">⌕</div>
-            <h3>Find your lesson</h3>
-            <p>Use the week filter or search box to locate the presentation assigned in Google Classroom.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <div class="guide-icon" aria-hidden="true">▶</div>
-            <h3>Open the presentation</h3>
-            <p>Select an available lesson. It will open as an interactive HTML presentation in your browser.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <div class="guide-icon" aria-hidden="true">✓</div>
-            <h3>Complete the activity</h3>
-            <p>Read every slide, follow the instructions, and submit the required output through your class channel.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="about-section section-shell" id="about">
-      <div class="about-card">
-        <div>
-          <div class="eyebrow"><span></span> About this site</div>
-          <h2>Designed for focused, accessible learning</h2>
-          <p>
-            ClassPres provides one reliable link for every HTML presentation. Lessons can be updated without changing the link already posted in Google Classroom.
-          </p>
-        </div>
-        <div class="about-points">
-          <span><i>✓</i> Works on phones, tablets, and computers</span>
-          <span><i>✓</i> No application installation required</span>
-          <span><i>✓</i> Direct links for every week and session</span>
-        </div>
-      </div>
+    <section class="section">
+      <h2 class="section-title">Finals <small>Week 11</small></h2>
+      <nav class="lessons" aria-label="Final lessons">
+        <a class="lesson" href="lesson.html?file=Week11_Session1_ERP_v2.html" target="_blank"><span class="number">21</span><span><span class="eyebrow">Week 11 · Session 1</span><h3>Enterprise Systems &amp; ERP</h3><p>Integrate finance, operations, people, master data, workflows, controls, and reporting.</p></span><span class="arrow">→</span></a>
+        <a class="lesson" href="lesson.html?file=Week11_Session2_ERPImplementation_v2.html" target="_blank"><span class="number">22</span><span><span class="eyebrow">Week 11 · Session 2</span><h3>ERP Implementation &amp; Change Management</h3><p>Plan implementation, data migration, testing, training, adoption, governance, and control.</p></span><span class="arrow">→</span></a>
+      </nav>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="section-shell footer-content">
-      <div class="brand footer-brand">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48"><path d="M8 10.5A4.5 4.5 0 0 1 12.5 6h23A4.5 4.5 0 0 1 40 10.5v21a4.5 4.5 0 0 1-4.5 4.5H27l-8 7v-7h-6.5A4.5 4.5 0 0 1 8 31.5v-21Z" fill="currentColor" opacity=".22"/><path d="M14 15h20M14 22h15M14 29h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-        </span>
-        <span><strong>ClassPres</strong><small>Presentation Hub</small></span>
-      </div>
-      <p>For educational use. Always follow your instructor’s official Google Classroom announcements.</p>
-      <a href="#top">Back to top ↑</a>
-    </div>
-  </footer>
-
-  <noscript>
-    <div class="noscript-message">Please enable JavaScript to display the lesson catalog.</div>
-  </noscript>
-
-  <script src="assets/js/app.js"></script>
+  <footer><div class="footer-inner"><p><strong>PROF 3 · Managing Information and Technology</strong><br>Cronasia Foundation College · Open each lesson in a modern browser for the best presentation experience.</p></div></footer>
 </body>
 </html>
