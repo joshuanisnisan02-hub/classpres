@@ -15,7 +15,9 @@
   <main class="error" id="error"><h1>Unable to open this lesson</h1><p id="errorMessage">Please return to the course portal and try again.</p><p><a href="./">Return to the course portal</a></p></main>
   <script>
     "use strict";
-    const CHUNKS = Array.from({length: 11}, (_, i) => `data/prof3-${String(i).padStart(2,"0")}.txt`);
+    const CHASSIS = Array.from({length: 5}, (_, i) => `data/chassis-${String(i).padStart(2,"0")}.txt`);
+    const PARTS = Array.from({length: 7}, (_, i) => `data/parts-${String(i).padStart(2,"0")}.txt`);
+    const SUFFIX = ".</p></section><script>document.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='n')document.body.classList.toggle('show')})<\/script></body></html>";
     const statusEl = document.getElementById("status");
     const frame = document.getElementById("frame");
     const errorBox = document.getElementById("error");
@@ -23,37 +25,11 @@
 
     function fail(message){statusEl.textContent="Lesson unavailable";frame.remove();errorMessage.textContent=message;errorBox.style.display="block";}
     function base64ToBytes(text){const clean=text.replace(/\s/g,"");const raw=atob(clean);const out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out;}
-    function u16(view,at){return view.getUint16(at,true)}
-    function u32(view,at){return view.getUint32(at,true)}
-    function decode(bytes){return new TextDecoder("utf-8").decode(bytes)}
-
-    async function inflateRaw(bytes){
+    async function fetchText(path){const response=await fetch(path,{cache:"force-cache"});if(!response.ok)throw new Error("The lesson data could not be downloaded.");return response.text();}
+    async function gunzip(bytes){
       if(typeof DecompressionStream!=="function")throw new Error("This browser does not support the lesson reader. Please use the latest Chrome or Microsoft Edge.");
-      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
-      return new Uint8Array(await new Response(stream).arrayBuffer());
-    }
-
-    async function extractZipFile(zipBytes,target){
-      const view=new DataView(zipBytes.buffer,zipBytes.byteOffset,zipBytes.byteLength);
-      let eocd=-1;
-      for(let i=zipBytes.length-22;i>=Math.max(0,zipBytes.length-65557);i--){if(u32(view,i)===0x06054b50){eocd=i;break}}
-      if(eocd<0)throw new Error("The lesson archive is invalid.");
-      const total=u16(view,eocd+10);let at=u32(view,eocd+16);
-      for(let i=0;i<total;i++){
-        if(u32(view,at)!==0x02014b50)throw new Error("The lesson archive could not be read.");
-        const method=u16(view,at+10),compressedSize=u32(view,at+20),nameLength=u16(view,at+28),extraLength=u16(view,at+30),commentLength=u16(view,at+32),localOffset=u32(view,at+42);
-        const name=decode(zipBytes.slice(at+46,at+46+nameLength));
-        if(name===target){
-          if(u32(view,localOffset)!==0x04034b50)throw new Error("The selected lesson is invalid.");
-          const localNameLength=u16(view,localOffset+26),localExtraLength=u16(view,localOffset+28),dataStart=localOffset+30+localNameLength+localExtraLength;
-          const compressed=zipBytes.slice(dataStart,dataStart+compressedSize);
-          const result=method===0?compressed:method===8?await inflateRaw(compressed):null;
-          if(!result)throw new Error("The selected lesson uses an unsupported archive format.");
-          return decode(result);
-        }
-        at+=46+nameLength+extraLength+commentLength;
-      }
-      throw new Error("The requested lesson was not found.");
+      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+      return new TextDecoder("utf-8").decode(await new Response(stream).arrayBuffer());
     }
 
     (async()=>{
@@ -61,9 +37,15 @@
         const file=new URLSearchParams(location.search).get("file");
         if(!file||!/^[A-Za-z0-9_.-]+\.html$/.test(file))throw new Error("No valid lesson was selected.");
         statusEl.textContent="Loading lesson…";
-        const parts=await Promise.all(CHUNKS.map(async path=>{const response=await fetch(path,{cache:"force-cache"});if(!response.ok)throw new Error("The lesson data could not be downloaded.");return response.text()}));
-        const zipBytes=base64ToBytes(parts.join(""));
-        const html=await extractZipFile(zipBytes,`PROF3/${file}`);
+        const [chassisChunks,partChunks]=await Promise.all([
+          Promise.all(CHASSIS.map(fetchText)),
+          Promise.all(PARTS.map(fetchText))
+        ]);
+        const chassis=chassisChunks.join("");
+        const lessonMap=JSON.parse(await gunzip(base64ToBytes(partChunks.join(""))));
+        const part=lessonMap[file];
+        if(typeof part!=="string")throw new Error("The requested lesson was not found.");
+        const html=chassis+part+SUFFIX;
         const blobUrl=URL.createObjectURL(new Blob([html],{type:"text/html;charset=utf-8"}));
         frame.src=blobUrl;statusEl.textContent=file.replace(/_v2\.html$/,".html").replaceAll("_"," ");
         frame.addEventListener("load",()=>{try{const title=frame.contentDocument?.title;if(title){document.title=title;statusEl.textContent=title}}catch{}},{once:true});
