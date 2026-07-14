@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A central portal for accessing class presentations, lessons, and learning materials.">
+  <meta name="theme-color" content="#071a3d">
+  <title>Class Presentation Hub</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="background-effects" aria-hidden="true">
+    <span class="orb orb-one"></span>
+    <span class="orb orb-two"></span>
+    <span class="grid-overlay"></span>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Class Presentation Hub home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" role="img">
+          <path d="M8 10.5A4.5 4.5 0 0 1 12.5 6h23A4.5 4.5 0 0 1 40 10.5v21a4.5 4.5 0 0 1-4.5 4.5H27l-8 7v-7h-6.5A4.5 4.5 0 0 1 8 31.5v-21Z" fill="currentColor" opacity=".22"/>
+          <path d="M14 15h20M14 22h15M14 29h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>
+        <strong>ClassPres</strong>
+        <small>Presentation Hub</small>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#lessons">Lessons</a>
+      <a href="#guide">Student Guide</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <a class="header-button" href="#lessons">Browse lessons</a>
+  </header>
+
+  <main id="top">
+    <section class="hero section-shell">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> Your digital classroom</div>
+        <h1>All class presentations, <em>organized in one place.</em></h1>
+        <p>
+          Open your assigned lesson, study each slide carefully, and complete the activities posted by your instructor.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#lessons">
+            View presentations
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="secondary-button" href="#guide">How to use this portal</a>
+        </div>
+        <div class="hero-meta" aria-label="Portal features">
+          <span><strong>36</strong> lesson slots</span>
+          <span><strong>18</strong> academic weeks</span>
+          <span><strong>24/7</strong> online access</span>
+        </div>
+      </div>
+
+      <div class="hero-panel" aria-label="Featured lesson preview">
+        <div class="panel-topbar">
+          <span class="window-dots"><i></i><i></i><i></i></span>
+          <span>classpres / lesson-viewer</span>
+          <span class="online-indicator">Online</span>
+        </div>
+        <div class="featured-card">
+          <div class="featured-number">01</div>
+          <span class="featured-label">Featured presentation</span>
+          <h2>Welcome to your learning portal</h2>
+          <p>The first sample presentation is ready. Replace it with your actual Week 1, Session 1 lesson anytime.</p>
+          <a href="presentations/week-01/session-01/">Open sample lesson <span>→</span></a>
+        </div>
+        <div class="mini-cards" aria-hidden="true">
+          <div><span>W01</span><strong>Session 1</strong></div>
+          <div><span>W01</span><strong>Session 2</strong></div>
+          <div><span>W02</span><strong>Session 1</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="notice-strip" aria-label="Important reminder">
+      <div class="section-shell notice-content">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <p><strong>Student reminder:</strong> Read each presentation carefully. Follow the instructions and submit required work through your assigned Google Classroom.</p>
+      </div>
+    </section>
+
+    <section class="lessons-section section-shell" id="lessons">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow"><span></span> Course library</div>
+          <h2>Find your presentation</h2>
+          <p>Search by lesson title or filter the cards by week and availability.</p>
+        </div>
+        <div class="lesson-count"><strong id="visibleCount">36</strong><span>lessons shown</span></div>
+      </div>
+
+      <div class="lesson-toolbar">
+        <label class="search-box">
+          <span class="sr-only">Search lessons</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="searchInput" type="search" placeholder="Search lesson title, week, or session…" autocomplete="off">
+        </label>
+
+        <div class="filter-group" aria-label="Lesson filters">
+          <select id="weekFilter" aria-label="Filter by week">
+            <option value="all">All weeks</option>
+          </select>
+          <select id="statusFilter" aria-label="Filter by availability">
+            <option value="all">All lessons</option>
+            <option value="available">Available</option>
+            <option value="upcoming">Upcoming</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lessonGrid" aria-live="polite"></div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <div aria-hidden="true">⌕</div>
+        <h3>No presentations found</h3>
+        <p>Try a different keyword or remove one of the filters.</p>
+        <button id="resetFilters" type="button">Reset filters</button>
+      </div>
+    </section>
+
+    <section class="guide-section" id="guide">
+      <div class="section-shell">
+        <div class="section-heading compact">
+          <div>
+            <div class="eyebrow light"><span></span> Simple instructions</div>
+            <h2>How students use the portal</h2>
+          </div>
+        </div>
+
+        <div class="guide-grid">
+          <article>
+            <span>01</span>
+            <div class="guide-icon" aria-hidden="true">⌕</div>
+            <h3>Find your lesson</h3>
+            <p>Use the week filter or search box to locate the presentation assigned in Google Classroom.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <div class="guide-icon" aria-hidden="true">▶</div>
+            <h3>Open the presentation</h3>
+            <p>Select an available lesson. It will open as an interactive HTML presentation in your browser.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <div class="guide-icon" aria-hidden="true">✓</div>
+            <h3>Complete the activity</h3>
+            <p>Read every slide, follow the instructions, and submit the required output through your class channel.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section section-shell" id="about">
+      <div class="about-card">
+        <div>
+          <div class="eyebrow"><span></span> About this site</div>
+          <h2>Designed for focused, accessible learning</h2>
+          <p>
+            ClassPres provides one reliable link for every HTML presentation. Lessons can be updated without changing the link already posted in Google Classroom.
+          </p>
+        </div>
+        <div class="about-points">
+          <span><i>✓</i> Works on phones, tablets, and computers</span>
+          <span><i>✓</i> No application installation required</span>
+          <span><i>✓</i> Direct links for every week and session</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section-shell footer-content">
+      <div class="brand footer-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M8 10.5A4.5 4.5 0 0 1 12.5 6h23A4.5 4.5 0 0 1 40 10.5v21a4.5 4.5 0 0 1-4.5 4.5H27l-8 7v-7h-6.5A4.5 4.5 0 0 1 8 31.5v-21Z" fill="currentColor" opacity=".22"/><path d="M14 15h20M14 22h15M14 29h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+        </span>
+        <span><strong>ClassPres</strong><small>Presentation Hub</small></span>
+      </div>
+      <p>For educational use. Always follow your instructor’s official Google Classroom announcements.</p>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <noscript>
+    <div class="noscript-message">Please enable JavaScript to display the lesson catalog.</div>
+  </noscript>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
