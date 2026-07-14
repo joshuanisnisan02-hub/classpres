@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a1533">
+  <title>Loading lesson…</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#07132f;color:#eef3ff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}body{display:grid;grid-template-rows:auto 1fr}.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1rem;background:#0c1c40;border-bottom:1px solid #29446f}.top a{color:#b8ccff;text-decoration:none;font-weight:700;font-size:.88rem}.status{color:#a8b7d3;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}iframe{width:100%;height:100%;border:0;background:white}.error{display:none;max-width:680px;margin:auto;padding:2rem;text-align:center;line-height:1.65}.error h1{font-size:1.4rem}.error a{color:#8fb2ff}
+  </style>
+</head>
+<body>
+  <div class="top"><a href="./">← Course portal</a><div class="status" id="status">Preparing your lesson…</div></div>
+  <iframe id="frame" title="Lesson presentation" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
+  <main class="error" id="error"><h1>Unable to open this lesson</h1><p id="errorMessage">Please return to the course portal and try again.</p><p><a href="./">Return to the course portal</a></p></main>
+  <script>
+    "use strict";
+    const CHUNKS = Array.from({length: 11}, (_, i) => `data/prof3-${String(i).padStart(2,"0")}.txt`);
+    const statusEl = document.getElementById("status");
+    const frame = document.getElementById("frame");
+    const errorBox = document.getElementById("error");
+    const errorMessage = document.getElementById("errorMessage");
+
+    function fail(message){statusEl.textContent="Lesson unavailable";frame.remove();errorMessage.textContent=message;errorBox.style.display="block";}
+    function base64ToBytes(text){const clean=text.replace(/\s/g,"");const raw=atob(clean);const out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out;}
+    function u16(view,at){return view.getUint16(at,true)}
+    function u32(view,at){return view.getUint32(at,true)}
+    function decode(bytes){return new TextDecoder("utf-8").decode(bytes)}
+
+    async function inflateRaw(bytes){
+      if(typeof DecompressionStream!=="function")throw new Error("This browser does not support the lesson reader. Please use the latest Chrome or Microsoft Edge.");
+      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+      return new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+
+    async function extractZipFile(zipBytes,target){
+      const view=new DataView(zipBytes.buffer,zipBytes.byteOffset,zipBytes.byteLength);
+      let eocd=-1;
+      for(let i=zipBytes.length-22;i>=Math.max(0,zipBytes.length-65557);i--){if(u32(view,i)===0x06054b50){eocd=i;break}}
+      if(eocd<0)throw new Error("The lesson archive is invalid.");
+      const total=u16(view,eocd+10);let at=u32(view,eocd+16);
+      for(let i=0;i<total;i++){
+        if(u32(view,at)!==0x02014b50)throw new Error("The lesson archive could not be read.");
+        const method=u16(view,at+10),compressedSize=u32(view,at+20),nameLength=u16(view,at+28),extraLength=u16(view,at+30),commentLength=u16(view,at+32),localOffset=u32(view,at+42);
+        const name=decode(zipBytes.slice(at+46,at+46+nameLength));
+        if(name===target){
+          if(u32(view,localOffset)!==0x04034b50)throw new Error("The selected lesson is invalid.");
+          const localNameLength=u16(view,localOffset+26),localExtraLength=u16(view,localOffset+28),dataStart=localOffset+30+localNameLength+localExtraLength;
+          const compressed=zipBytes.slice(dataStart,dataStart+compressedSize);
+          const result=method===0?compressed:method===8?await inflateRaw(compressed):null;
+          if(!result)throw new Error("The selected lesson uses an unsupported archive format.");
+          return decode(result);
+        }
+        at+=46+nameLength+extraLength+commentLength;
+      }
+      throw new Error("The requested lesson was not found.");
+    }
+
+    (async()=>{
+      try{
+        const file=new URLSearchParams(location.search).get("file");
+        if(!file||!/^[A-Za-z0-9_.-]+\.html$/.test(file))throw new Error("No valid lesson was selected.");
+        statusEl.textContent="Loading lesson…";
+        const parts=await Promise.all(CHUNKS.map(async path=>{const response=await fetch(path,{cache:"force-cache"});if(!response.ok)throw new Error("The lesson data could not be downloaded.");return response.text()}));
+        const zipBytes=base64ToBytes(parts.join(""));
+        const html=await extractZipFile(zipBytes,`PROF3/${file}`);
+        const blobUrl=URL.createObjectURL(new Blob([html],{type:"text/html;charset=utf-8"}));
+        frame.src=blobUrl;statusEl.textContent=file.replace(/_v2\.html$/,".html").replaceAll("_"," ");
+        frame.addEventListener("load",()=>{try{const title=frame.contentDocument?.title;if(title){document.title=title;statusEl.textContent=title}}catch{}},{once:true});
+        addEventListener("beforeunload",()=>URL.revokeObjectURL(blobUrl),{once:true});
+      }catch(error){console.error(error);fail(error instanceof Error?error.message:"The lesson could not be opened.")}
+    })();
+  </script>
+</body>
+</html>
