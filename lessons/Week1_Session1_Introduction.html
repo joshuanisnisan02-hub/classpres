@@ -17,7 +17,7 @@
   <iframe id="deck" title="Week 1 Session 1 presentation" allow="fullscreen"></iframe>
   <script>
     "use strict";
-    const DATA_FILES=["../data/week1-session1-00.txt", "../data/week1-session1-01.txt", "../data/week1-session1-02.txt", "../data/week1-session1-03.txt", "../data/week1-session1-04.txt", "../data/week1-session1-05.txt", "../data/week1-session1-06.txt", "../data/week1-session1-07.txt", "../data/week1-session1-08.txt"];
+    const DATA_FILES=Array.from({length:7},(_,i)=>`../data/w1s1-${String(i).padStart(2,"0")}.txt`);
     const loading=document.getElementById("loading");
     const deck=document.getElementById("deck");
     function base64ToBytes(text){const clean=text.replace(/\s/g,"");const raw=atob(clean);const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);return bytes;}
